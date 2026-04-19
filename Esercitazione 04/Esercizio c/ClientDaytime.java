@@ -1,28 +1,21 @@
 import java.net.*;
 
 public class ClientDaytime {
-    public static void main(String[] args) {
-        String serverHostname = "127.0.0.1";
-        int port = 1313;
-
-        try (DatagramSocket socket = new DatagramSocket()) {
-            InetAddress address = InetAddress.getByName(serverHostname);
-
-            byte[] sendBuf = new byte[1]; 
-            DatagramPacket sendPacket = new DatagramPacket(sendBuf, sendBuf.length, address, port);
-            socket.send(sendPacket);
-            System.out.println("Richiesta inviata al server...");
-
-            byte[] receiveBuf = new byte[1024];
-            DatagramPacket receivePacket = new DatagramPacket(receiveBuf, receiveBuf.length);
-
-            socket.receive(receivePacket);
-            String risposta = new String(receivePacket.getData(), 0, receivePacket.getLength());
-
-            System.out.println("Risposta dal server: " + risposta);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args) throws Exception {
+        DatagramSocket clientSocket = new DatagramSocket();
+        InetAddress IPAddress = InetAddress.getByName("localhost");
+        
+        byte[] sendData = new byte[0];
+        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 1313);
+        clientSocket.send(sendPacket);
+        
+        byte[] receiveData = new byte[1024];
+        DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+        clientSocket.receive(receivePacket);
+        
+        String risposta = new String(receivePacket.getData(), 0, receivePacket.getLength());
+        System.out.println(risposta);
+        
+        clientSocket.close();
     }
 }
